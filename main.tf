@@ -28,6 +28,7 @@ module "infrastructure" {
   acm_certificate_arn = var.acm_certificate_arn
   domain_name         = var.domain_name
   route53_zone_id     = var.route53_zone_id
+  region              = var.region
   tags                = local.common_tags
 }
 

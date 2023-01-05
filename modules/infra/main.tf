@@ -47,7 +47,7 @@ POLICY
 resource "aws_cloudfront_distribution" "static_website" {
   enabled = true
   origin {
-    domain_name = "http://${aws_s3_bucket.website.bucket_regional_domain_name}"
+    domain_name = "${aws_s3_bucket.website.bucket}.s3-website-${var.region}.amazonaws.com}"
     origin_id   = aws_s3_bucket.website.bucket
   }
 
