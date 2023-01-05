@@ -16,3 +16,8 @@ variable "acm_certificate_arn" {
   type        = string
   description = "ARN of the ACM certificate to use for the CloudFront distribution"
 }
+
+variable "domain_name" {
+  type        = string
+  description = "Domain name to use for the CloudFront distribution"
+}

@@ -16,14 +16,16 @@ resource "aws_s3_bucket_acl" "bucket_acl" {
 resource "aws_cloudfront_distribution" "static_website" {
   enabled = true
   origin {
-    domain_name = "pippo.com"
-    origin_id   = "S3-${aws_s3_bucket.website.bucket}"
+    domain_name = aws_s3_bucket.website.bucket_regional_domain_name
+    origin_id   = aws_s3_bucket.website.bucket
   }
+
+  aliases = [var.domain_name]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3-${aws_s3_bucket.website.bucket}"
+    target_origin_id = aws_s3_bucket.website.bucket
 
     forwarded_values {
       cookies {
