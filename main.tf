@@ -23,9 +23,10 @@ provider "aws" {
   }
 }
 
-module infrastructure {
-  source = "./modules/infra"
-  tags = local.common_tags
+module "infrastructure" {
+  source              = "./modules/infra"
+  acm_certificate_arn = var.acm_certificate_arn
+  tags                = local.common_tags
 }
 
 
