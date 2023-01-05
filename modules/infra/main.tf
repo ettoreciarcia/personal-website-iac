@@ -13,6 +13,18 @@ resource "aws_s3_bucket_acl" "bucket_acl" {
   acl    = "public-read"
 }
 
+resource "aws_s3_bucket_website_configuration" "bucket_website" {
+  bucket = aws_s3_bucket.website.bucket
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
 resource "aws_cloudfront_distribution" "static_website" {
   enabled = true
   origin {
@@ -48,26 +60,3 @@ resource "aws_cloudfront_distribution" "static_website" {
     }
   }
 }
-
-# resource "aws_acm_certificate" "acm_certificate" {
-#   domain_name       = var.domain_name
-#   validation_method = "DNS"
-# }
-
-# # Wait for the certificate to be issued
-# resource "aws_acm_certificate_validation" "certificate_validation" {
-#   certificate_arn = aws_acm_certificate.acm_certificate.arn
-#   validation_record_fqdns = [aws_route53_record.aws_route53_record.fqdn]
-# }
-
-# # Create a Route53 record for the certificate validation
-# resource "aws_route53_record" "aws_route53_record" {
-#   name    = aws_acm_certificate_validation.certificate_validation.resource_record_name
-#   type    = aws_acm_certificate_validation.certificate_validation.resource_record_type
-#   zone_id = "${var.route53_zone_id}"
-#   records = [aws_acm_certificate_validation.certificate_validation.resource_record_value]
-#   ttl     = 60
-
-#   depends_on = [aws_acm_certificate.acm_certificate]
-
-# }
