@@ -27,6 +27,7 @@ module "infrastructure" {
   source              = "./modules/infra"
   acm_certificate_arn = var.acm_certificate_arn
   domain_name         = var.domain_name
+  route53_zone_id     = var.route53_zone_id
   tags                = local.common_tags
 }
 
