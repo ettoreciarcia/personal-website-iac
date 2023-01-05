@@ -6,5 +6,4 @@ locals {
 
 resource aws_s3_bucket website {
   bucket = "${local.application_name}-ciarcia"
-  tags = var.tags
 }
