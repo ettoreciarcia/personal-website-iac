@@ -40,4 +40,10 @@ module "infrastructure" {
   bucket_suffix       = var.bucket_suffix
 }
 
+module "iam" {
+  source                      = "./modules/security"
+  bucket_arn                  = module.infrastructure.bucket_arn
+  cloudfront_distribution_arn = module.infrastructure.cloudfront_distribution_arn
+  tags                        = local.common_tags
+}
 
