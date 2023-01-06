@@ -38,6 +38,11 @@ resource "aws_iam_policy" "github_actions_policy" {
 POLICY
 }
 
+//attach policy to user
+resource "aws_iam_user_policy_attachment" "github_actions_policy_attachment" {
+  user       = aws_iam_user.github_actions.name
+  policy_arn = aws_iam_policy.github_actions_policy.arn
+}
 
 
 
