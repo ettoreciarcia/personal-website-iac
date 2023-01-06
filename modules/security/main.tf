@@ -11,7 +11,7 @@ resource "aws_iam_user" "github_actions" {
 
 //create iam policy to grant all priviles on a single bucket and invalidate CDN
 resource "aws_iam_policy" "github_actions_policy" {
-  name = "${local.application_name}--${local.environment}-github-actions-policy"
+  name = "${local.application_name}-${local.environment}-github-actions-policy"
 
   policy = <<POLICY
 {
@@ -31,7 +31,7 @@ resource "aws_iam_policy" "github_actions_policy" {
       "Sid": "VisualEditor0",
       "Effect": "Allow",
       "Action": "cloudfront:CreateInvalidation",
-      "Resource": "${var.cloudfront_distribution_arn}}"
+      "Resource": "${var.cloudfront_distribution_arn}"
     }
   ]
 }
