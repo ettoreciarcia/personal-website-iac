@@ -5,7 +5,7 @@ locals {
 
 //create iam user for github actions to deploy to s3 bucket and cloudfront 
 resource "aws_iam_user" "github_actions" {
-  name = "github-actions-"
+  name = "github-actions-${local.application_name}-${local.environment}"
 }
 
 
