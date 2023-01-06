@@ -88,38 +88,19 @@ module "cdn_data_superset" {
 
 }
 
-# resource "aws_cloudfront_distribution" "static_website" {
-#   enabled = true
-#   origin {
-#     domain_name = aws_s3_bucket_website_configuration.bucket_website.website_endpoint #${aws_s3_bucket.website.bucket}.s3-website-${var.region}.amazonaws.com" #aws_s3_bucket.website.bucket_regional_domain_name #"${aws_s3_bucket.website.bucket}.s3-website-${var.region}.amazonaws.com}" #bucket_regional_domain_name does not contain the region
-#     origin_id   = aws_s3_bucket.website.bucket
-#   }
 
-#   aliases = [var.domain_name]
+resource "aws_route53_record" "A_record" {
+  zone_id = var.route53_zone_id
+  name    = var.domain_name
+  type    = "A"
+  ttl     = 300
+  records = [module.cdn_data_superset.cloudfront_distribution_domain_name]
+}
 
-#   default_cache_behavior {
-#     allowed_methods  = ["GET", "HEAD"]
-#     cached_methods   = ["GET", "HEAD"]
-#     target_origin_id = aws_s3_bucket.website.bucket
-
-#     forwarded_values {
-#       cookies {
-#         forward = "none"
-#       }
-#       query_string = false
-#     }
-
-#     viewer_protocol_policy = "redirect-to-https"
-#   }
-
-#   viewer_certificate {
-#     acm_certificate_arn = var.acm_certificate_arn
-#     ssl_support_method  = "sni-only"
-#   }
-
-#   restrictions {
-#     geo_restriction {
-#       restriction_type = "none"
-#     }
-#   }
-# }
+resource "aws_route53_record" "AAAA_record" {
+  zone_id = var.route53_zone_id
+  name    = var.domain_name
+  type    = "AAAA"
+  ttl     = 300
+  records = [module.cdn_data_superset.cloudfront_distribution_domain_name]
+}
