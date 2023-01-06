@@ -93,14 +93,22 @@ resource "aws_route53_record" "A_record" {
   zone_id = var.route53_zone_id
   name    = var.domain_name
   type    = "A"
-  ttl     = 300
-  records = [module.cdn_website.cloudfront_distribution_domain_name]
+
+  alias {
+    name                   = module.cdn_website.cloudfront_distribution_domain_name
+    zone_id                = module.cdn_website.cloudfront_distribution_hosted_zone_id
+    evaluate_target_health = false
+  }
+
 }
 
 resource "aws_route53_record" "AAAA_record" {
   zone_id = var.route53_zone_id
   name    = var.domain_name
   type    = "AAAA"
-  ttl     = 300
-  records = [module.cdn_website.cloudfront_distribution_domain_name]
+  alias {
+    name                   = module.cdn_website.cloudfront_distribution_domain_name
+    zone_id                = module.cdn_website.cloudfront_distribution_hosted_zone_id
+    evaluate_target_health = false
+  }
 }
