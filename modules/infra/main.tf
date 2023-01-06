@@ -45,38 +45,81 @@ POLICY
 }
 
 
-resource "aws_cloudfront_distribution" "static_website" {
-  enabled = true
-  origin {
-    domain_name = aws_s3_bucket_website_configuration.bucket_website.website_endpoint #${aws_s3_bucket.website.bucket}.s3-website-${var.region}.amazonaws.com" #aws_s3_bucket.website.bucket_regional_domain_name #"${aws_s3_bucket.website.bucket}.s3-website-${var.region}.amazonaws.com}" #bucket_regional_domain_name does not contain the region
-    origin_id   = aws_s3_bucket.website.bucket
-  }
+module "cdn_data_superset" {
+  source  = "terraform-aws-modules/cloudfront/aws"
+  version = "2.9.3"
 
-  aliases = [var.domain_name]
+  aliases             = [var.domain_name]
+  enabled             = true
+  is_ipv6_enabled     = true
+  price_class         = "PriceClass_All"
+  retain_on_delete    = false
+  wait_for_deployment = false
+  default_root_object = "index.html"
 
-  default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_s3_bucket.website.bucket
-
-    forwarded_values {
-      cookies {
-        forward = "none"
+  origin = {
+    s3_origin_data = {
+      domain_name = aws_s3_bucket_website_configuration.bucket_website.website_endpoint
+      custom_origin_config = {
+        http_port              = 80
+        https_port             = 443
+        origin_protocol_policy = "http-only"
+        origin_ssl_protocols   = ["TLSv1"]
       }
-      query_string = false
-    }
 
-    viewer_protocol_policy = "redirect-to-https"
+    }
   }
 
-  viewer_certificate {
+  default_cache_behavior = {
+    target_origin_id       = "s3_origin_data"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "DELETE", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = false
+    query_string           = true
+    cookies_forward        = "all"
+    headers                = ["Access-Control-Request-Headers", "Access-Control-Request-Method", "Authorization", "Origin"]
+  }
+
+  viewer_certificate = {
     acm_certificate_arn = var.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
 
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
 }
+
+# resource "aws_cloudfront_distribution" "static_website" {
+#   enabled = true
+#   origin {
+#     domain_name = aws_s3_bucket_website_configuration.bucket_website.website_endpoint #${aws_s3_bucket.website.bucket}.s3-website-${var.region}.amazonaws.com" #aws_s3_bucket.website.bucket_regional_domain_name #"${aws_s3_bucket.website.bucket}.s3-website-${var.region}.amazonaws.com}" #bucket_regional_domain_name does not contain the region
+#     origin_id   = aws_s3_bucket.website.bucket
+#   }
+
+#   aliases = [var.domain_name]
+
+#   default_cache_behavior {
+#     allowed_methods  = ["GET", "HEAD"]
+#     cached_methods   = ["GET", "HEAD"]
+#     target_origin_id = aws_s3_bucket.website.bucket
+
+#     forwarded_values {
+#       cookies {
+#         forward = "none"
+#       }
+#       query_string = false
+#     }
+
+#     viewer_protocol_policy = "redirect-to-https"
+#   }
+
+#   viewer_certificate {
+#     acm_certificate_arn = var.acm_certificate_arn
+#     ssl_support_method  = "sni-only"
+#   }
+
+#   restrictions {
+#     geo_restriction {
+#       restriction_type = "none"
+#     }
+#   }
+# }
