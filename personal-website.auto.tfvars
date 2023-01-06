@@ -1,5 +1,6 @@
 region              = "eu-west-1"
 application_name    = "personal-website"
+bucket_suffix       = "ciarcia"
 environment         = "prod"
 acm_certificate_arn = "arn:aws:acm:us-east-1:860443674636:certificate/71837f13-675d-474a-9adc-1710a69da388"
 domain_name         = "ettoreciarcia.com"

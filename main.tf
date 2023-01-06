@@ -37,6 +37,7 @@ module "infrastructure" {
   route53_zone_id     = var.route53_zone_id
   region              = var.region
   tags                = local.common_tags
+  bucket_suffix       = var.bucket_suffix
 }
 
 

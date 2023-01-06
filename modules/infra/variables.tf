@@ -22,3 +22,7 @@ variable "route53_zone_id" {
 variable "region" {
   type = string
 }
+
+variable "bucket_suffix" {
+  type = string
+}
