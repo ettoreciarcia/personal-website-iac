@@ -45,62 +45,62 @@ POLICY
 }
 
 
-module "cdn_data_superset" {
-  source  = "terraform-aws-modules/cloudfront/aws"
-  version = "2.9.3"
+# module "cdn_data_superset" {
+#   source  = "terraform-aws-modules/cloudfront/aws"
+#   version = "2.9.3"
 
-  aliases             = [var.domain_name]
-  enabled             = true
-  is_ipv6_enabled     = true
-  price_class         = "PriceClass_All"
-  retain_on_delete    = false
-  wait_for_deployment = false
-  default_root_object = "index.html"
+#   aliases             = [var.domain_name]
+#   enabled             = true
+#   is_ipv6_enabled     = true
+#   price_class         = "PriceClass_All"
+#   retain_on_delete    = false
+#   wait_for_deployment = false
+#   default_root_object = "index.html"
 
-  origin = {
-    s3_origin_data = {
-      domain_name = aws_s3_bucket_website_configuration.bucket_website.website_endpoint
-      custom_origin_config = {
-        http_port              = 80
-        https_port             = 443
-        origin_protocol_policy = "http-only"
-        origin_ssl_protocols   = ["TLSv1"]
-      }
+#   origin = {
+#     s3_origin_data = {
+#       domain_name = aws_s3_bucket_website_configuration.bucket_website.website_endpoint
+#       custom_origin_config = {
+#         http_port              = 80
+#         https_port             = 443
+#         origin_protocol_policy = "http-only"
+#         origin_ssl_protocols   = ["TLSv1"]
+#       }
 
-    }
-  }
+#     }
+#   }
 
-  default_cache_behavior = {
-    target_origin_id       = "s3_origin_data"
-    viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD", "OPTIONS", "DELETE", "PATCH", "POST", "PUT"]
-    cached_methods         = ["GET", "HEAD"]
-    compress               = false
-    query_string           = true
-    cookies_forward        = "all"
-    headers                = ["Access-Control-Request-Headers", "Access-Control-Request-Method", "Authorization", "Origin"]
-  }
+#   default_cache_behavior = {
+#     target_origin_id       = "s3_origin_data"
+#     viewer_protocol_policy = "redirect-to-https"
+#     allowed_methods        = ["GET", "HEAD", "OPTIONS", "DELETE", "PATCH", "POST", "PUT"]
+#     cached_methods         = ["GET", "HEAD"]
+#     compress               = false
+#     query_string           = true
+#     cookies_forward        = "all"
+#     headers                = ["Access-Control-Request-Headers", "Access-Control-Request-Method", "Authorization", "Origin"]
+#   }
 
-  viewer_certificate = {
-    acm_certificate_arn = var.acm_certificate_arn
-    ssl_support_method  = "sni-only"
-  }
+#   viewer_certificate = {
+#     acm_certificate_arn = var.acm_certificate_arn
+#     ssl_support_method  = "sni-only"
+#   }
 
-}
+# }
 
 
-resource "aws_route53_record" "A_record" {
-  zone_id = var.route53_zone_id
-  name    = var.domain_name
-  type    = "A"
-  ttl     = 300
-  records = [module.cdn_data_superset.cloudfront_distribution_domain_name]
-}
+# resource "aws_route53_record" "A_record" {
+#   zone_id = var.route53_zone_id
+#   name    = var.domain_name
+#   type    = "A"
+#   ttl     = 300
+#   records = [module.cdn_data_superset.cloudfront_distribution_domain_name]
+# }
 
-resource "aws_route53_record" "AAAA_record" {
-  zone_id = var.route53_zone_id
-  name    = var.domain_name
-  type    = "AAAA"
-  ttl     = 300
-  records = [module.cdn_data_superset.cloudfront_distribution_domain_name]
-}
+# resource "aws_route53_record" "AAAA_record" {
+#   zone_id = var.route53_zone_id
+#   name    = var.domain_name
+#   type    = "AAAA"
+#   ttl     = 300
+#   records = [module.cdn_data_superset.cloudfront_distribution_domain_name]
+# }
