@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "website" {
 }
 
 resource "aws_s3_bucket" "test-github_actions" {
-  bucket = "assss"
+  bucket = "asssslksdnflaksn-ciarcia"
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
