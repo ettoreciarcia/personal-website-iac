@@ -13,6 +13,11 @@ resource "aws_s3_bucket_acl" "bucket_acl" {
   acl    = "public-read"
 }
 
+resource "aws_s3_bucket" "bucket_gh_actions" {
+  bucket = "${local.application_name}-${var.bucket_suffix}-test-gh-actions"
+}
+
+
 resource "aws_s3_bucket_website_configuration" "bucket_website" {
   bucket = aws_s3_bucket.website.bucket
 
