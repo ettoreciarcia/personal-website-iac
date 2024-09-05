@@ -7,6 +7,8 @@ locals {
 }
 
 terraform {
+
+  required_version = ">= 1.0"
   backend "remote" {
     hostname     = "app.terraform.io"
     organization = "hechaorganization"
@@ -16,6 +18,7 @@ terraform {
   }
 
   required_providers {
+
     aws = {
       source  = "hashicorp/aws"
       version = "4.49.0"

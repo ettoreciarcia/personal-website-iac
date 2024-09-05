@@ -112,3 +112,27 @@ resource "aws_route53_record" "AAAA_record" {
     evaluate_target_health = false
   }
 }
+
+resource "aws_route53_record" "www_A_record" {
+  zone_id = var.route53_zone_id
+  name    = "www.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = module.cdn_website.cloudfront_distribution_domain_name
+    zone_id                = module.cdn_website.cloudfront_distribution_hosted_zone_id
+    evaluate_target_health = false
+  }
+
+}
+
+resource "aws_route53_record" "www_AAAA_record" {
+  zone_id = var.route53_zone_id
+  name    = "www.${var.domain_name}"
+  type    = "AAAA"
+  alias {
+    name                   = module.cdn_website.cloudfront_distribution_domain_name
+    zone_id                = module.cdn_website.cloudfront_distribution_hosted_zone_id
+    evaluate_target_health = false
+  }
+}
