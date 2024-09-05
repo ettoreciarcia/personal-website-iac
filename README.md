@@ -40,4 +40,6 @@ No resources.
 ## Outputs
 
 No outputs.
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
+<!-- BEGIN_TF_DOCS -->
+<!-- END_TF_DOCS -->
