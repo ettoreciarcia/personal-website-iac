@@ -49,7 +49,7 @@ module "cdn_website" {
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "2.9.3"
 
-  aliases             = [var.domain_name]
+  aliases             = [var.domain_name, "www.${var.domain_name}"]
   enabled             = true
   is_ipv6_enabled     = true
   price_class         = "PriceClass_All"
